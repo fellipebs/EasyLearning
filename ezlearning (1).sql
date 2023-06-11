@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 21, 2019 at 12:41 AM
--- Server version: 5.7.26
--- PHP Version: 7.2.18
+-- Tempo de geração: 11-Jun-2023 às 23:38
+-- Versão do servidor: 8.0.31
+-- versão do PHP: 8.0.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,15 +18,15 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ezlearning`
+-- Banco de dados: `ezlearning`
 --
 
 DELIMITER $$
 --
--- Procedures
+-- Procedimentos
 --
 DROP PROCEDURE IF EXISTS `alimentaTabelaUsuario`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `alimentaTabelaUsuario` ()  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `alimentaTabelaUsuario` ()   BEGIN
     INSERT INTO `ezlearning`.`usuarios` (`usuario`, `email`, `login`, `senha`, `foto`, `tipo`) VALUES ('curso01', 'curso01@gmail.com', 'curso01', md5(123), 'default.png', '0');
     INSERT INTO `ezlearning`.`usuarios` (`usuario`, `email`, `login`, `senha`, `foto`, `tipo`) VALUES ('curso02', 'curso02@gmail.com', 'curso02', md5(123), 'default.png', '0');
     INSERT INTO `ezlearning`.`usuarios` (`usuario`, `email`, `login`, `senha`, `foto`, `tipo`) VALUES ('curso03', 'curso03@gmail.com', 'curso03', md5(123), 'default.png', '0');
@@ -82,7 +81,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `alimentaTabelaUsuario` ()  BEGIN
 END$$
 
 DROP PROCEDURE IF EXISTS `deletaTabelaUsuario`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `deletaTabelaUsuario` ()  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletaTabelaUsuario` ()   BEGIN
 delete from usuarios where usuario = 'curso01' or  usuario = 'curso02' or  usuario = 'curso03' or  usuario = 'curso04' or  usuario =
  'curso05' or  usuario = 'curso06' or  usuario = 'curso07' or  usuario = 'curso08' or  usuario = 'curso09' or  usuario = 'curso10' or 
   usuario = 'curso11' or  usuario = 'curso12'  or  usuario = 'curso13' or  usuario = 'curso14' or  usuario = 'curso15' or
@@ -95,32 +94,29 @@ delete from usuarios where usuario = 'curso01' or  usuario = 'curso02' or  usuar
 END$$
 
 DROP PROCEDURE IF EXISTS `usuario_do_aluno_id`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `usuario_do_aluno_id` (IN `id` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `usuario_do_aluno_id` (IN `id` INT)   BEGIN
 SELECT * FROM aluno where usuario_id_aluno = id;
 END$$
 
 --
--- Functions
+-- Funções
 --
 DROP FUNCTION IF EXISTS `medalhas_bronze_aluno`$$
-CREATE DEFINER=`ezlearning`@`%%` FUNCTION `medalhas_bronze_aluno` (`p_aluno_id` INT) RETURNS INT(11) NO SQL
-BEGIN
+CREATE DEFINER=`ezlearning`@`%%` FUNCTION `medalhas_bronze_aluno` (`p_aluno_id` INT) RETURNS INT NO SQL BEGIN
 DECLARE bronze INT; 
 SELECT COUNT(m.tipo) INTO bronze FROM medalha m WHERE aluno_id=p_aluno_id and m.tipo = 0;
 RETURN bronze;
 END$$
 
 DROP FUNCTION IF EXISTS `medalhas_ouro_aluno`$$
-CREATE DEFINER=`ezlearning`@`%%` FUNCTION `medalhas_ouro_aluno` (`p_aluno_id` INT) RETURNS INT(11) NO SQL
-BEGIN
+CREATE DEFINER=`ezlearning`@`%%` FUNCTION `medalhas_ouro_aluno` (`p_aluno_id` INT) RETURNS INT NO SQL BEGIN
 DECLARE ouro INT; 
 SELECT COUNT(m.tipo) INTO ouro FROM medalha m WHERE aluno_id=p_aluno_id and m.tipo = 2;
 RETURN ouro;
 END$$
 
 DROP FUNCTION IF EXISTS `medalhas_prata_aluno`$$
-CREATE DEFINER=`ezlearning`@`%%` FUNCTION `medalhas_prata_aluno` (`p_aluno_id` INT) RETURNS INT(11) NO SQL
-BEGIN
+CREATE DEFINER=`ezlearning`@`%%` FUNCTION `medalhas_prata_aluno` (`p_aluno_id` INT) RETURNS INT NO SQL BEGIN
 DECLARE prata INT; 
 SELECT COUNT(m.tipo) INTO prata FROM medalha m WHERE aluno_id=p_aluno_id and m.tipo = 1;
 RETURN prata;
@@ -131,25 +127,25 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `aluno`
+-- Estrutura da tabela `aluno`
 --
 
 DROP TABLE IF EXISTS `aluno`;
 CREATE TABLE IF NOT EXISTS `aluno` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(45) COLLATE latin1_general_ci NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nome` varchar(45) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `dt_nascimento` date NOT NULL,
-  `responsavel` varchar(45) COLLATE latin1_general_ci NOT NULL,
-  `status` int(11) NOT NULL,
-  `turma_id` int(11) NOT NULL,
-  `usuario_id` int(11) NOT NULL,
+  `responsavel` varchar(45) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `status` int NOT NULL,
+  `turma_id` int NOT NULL,
+  `usuario_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `turma_id` (`turma_id`),
   KEY `usuario_id_aluno` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
--- Dumping data for table `aluno`
+-- Extraindo dados da tabela `aluno`
 --
 
 INSERT INTO `aluno` (`id`, `nome`, `dt_nascimento`, `responsavel`, `status`, `turma_id`, `usuario_id`) VALUES
@@ -176,31 +172,35 @@ INSERT INTO `aluno` (`id`, `nome`, `dt_nascimento`, `responsavel`, `status`, `tu
 (75, 'Teste Aluno testado', '2001-05-12', 'Teste mae aluno', 1, 2, 136),
 (81, 'gabruel ijihdfsdf', '2222-12-12', 'Joana', 1, 24, 139),
 (82, 'Someone', '2002-02-12', 'Responsavel De alguem', 1, 20, 148),
-(127, 'Juan', '2004-11-05', 'Resp', 1, 1, 26),
-(128, 'Aluno Teste', '2019-11-15', 'Responsável Teste', 1, 26, 150);
+(127, 'Juan Felipe', '2002-03-02', 'Joana 2', 0, 26, 26),
+(128, 'Aluno', '2019-11-15', 'Responsável Teste', 1, 26, 150),
+(129, 'Joana', '2002-03-02', 'Pai do Aluno 24', 1, 19, 153),
+(130, 'Chaves da Vila', '2023-05-17', 'Sr. Barriga', 1, 28, 158),
+(131, 'Chiquinha', '2023-05-03', 'Sr. Madruga', 1, 28, 159),
+(132, 'Fellipe Barcelos Saraiva', '2002-03-02', 'asdasda', 1, 30, 160);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `atividade`
+-- Estrutura da tabela `atividade`
 --
 
 DROP TABLE IF EXISTS `atividade`;
 CREATE TABLE IF NOT EXISTS `atividade` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(50) COLLATE latin1_general_ci NOT NULL,
-  `descricao` text COLLATE latin1_general_ci NOT NULL,
-  `arquivo` varchar(100) COLLATE latin1_general_ci NOT NULL,
-  `imagem` varchar(45) COLLATE latin1_general_ci NOT NULL,
-  `professor_id` int(11) NOT NULL,
-  `disciplina_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nome` varchar(50) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `descricao` text CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `arquivo` varchar(100) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `imagem` varchar(45) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `professor_id` int NOT NULL,
+  `disciplina_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `disciplina_id` (`disciplina_id`),
   KEY `professor_id` (`professor_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
--- Dumping data for table `atividade`
+-- Extraindo dados da tabela `atividade`
 --
 
 INSERT INTO `atividade` (`id`, `nome`, `descricao`, `arquivo`, `imagem`, `professor_id`, `disciplina_id`) VALUES
@@ -218,23 +218,23 @@ INSERT INTO `atividade` (`id`, `nome`, `descricao`, `arquivo`, `imagem`, `profes
 -- --------------------------------------------------------
 
 --
--- Table structure for table `atividade_aluno`
+-- Estrutura da tabela `atividade_aluno`
 --
 
 DROP TABLE IF EXISTS `atividade_aluno`;
 CREATE TABLE IF NOT EXISTS `atividade_aluno` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `status` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `status` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `data` datetime NOT NULL,
-  `aluno_id` int(11) NOT NULL,
-  `atividade_id` int(11) NOT NULL,
+  `aluno_id` int NOT NULL,
+  `atividade_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `aluno_id` (`aluno_id`),
   KEY `atividade_id` (`atividade_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=208 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
--- Dumping data for table `atividade_aluno`
+-- Extraindo dados da tabela `atividade_aluno`
 --
 
 INSERT INTO `atividade_aluno` (`id`, `status`, `data`, `aluno_id`, `atividade_id`) VALUES
@@ -246,50 +246,115 @@ INSERT INTO `atividade_aluno` (`id`, `status`, `data`, `aluno_id`, `atividade_id
 (54, 'pendente', '2019-09-18 13:51:00', 30, 7),
 (55, 'pendente', '2019-09-18 13:51:00', 31, 7),
 (56, 'pendente', '2019-09-18 13:51:00', 32, 7),
-(57, 'pendente', '2019-09-18 13:51:00', 33, 7),
-(58, 'pendente', '2019-09-18 13:51:00', 34, 7),
+(57, 'pendente', '2019-09-18 13:51:00', 33, 1),
+(58, 'pendente', '2019-09-18 13:51:00', 34, 1),
 (59, 'pendente', '2019-09-18 13:51:00', 35, 7),
 (60, 'pendente', '2019-09-18 13:51:00', 36, 7),
 (61, 'pendente', '2019-09-18 13:51:00', 37, 7),
 (64, 'pendente', '2019-09-18 16:39:00', 30, 8),
 (65, 'pendente', '2019-09-18 16:39:00', 31, 8),
 (66, 'pendente', '2019-09-18 16:39:00', 32, 8),
-(67, 'pendente', '2019-09-18 16:39:00', 33, 8),
-(68, 'pendente', '2019-09-18 16:39:00', 34, 8),
+(67, 'pendente', '2019-09-18 16:39:00', 33, 2),
+(68, 'pendente', '2019-09-18 16:39:00', 34, 2),
 (69, 'pendente', '2019-09-18 16:39:00', 35, 8),
 (70, 'pendente', '2019-09-18 16:39:00', 36, 8),
 (71, 'pendente', '2019-09-18 16:39:00', 37, 8),
 (74, 'pendente', '2019-09-19 20:55:00', 30, 9),
 (75, 'pendente', '2019-09-19 20:55:00', 31, 9),
 (76, 'pendente', '2019-09-19 20:55:00', 32, 9),
-(77, 'pendente', '2019-09-19 20:55:00', 33, 9),
-(78, 'pendente', '2019-09-19 20:55:00', 34, 9),
+(77, 'pendente', '2019-09-19 20:55:00', 33, 3),
+(78, 'pendente', '2019-09-19 20:55:00', 34, 3),
 (79, 'pendente', '2019-09-19 20:55:00', 35, 9),
 (80, 'pendente', '2019-09-19 20:55:00', 36, 9),
 (81, 'pendente', '2019-09-19 20:55:00', 37, 9),
 (82, 'pendente', '2019-09-23 12:15:00', 1, 5),
 (83, 'Corrigida - Com nota', '2019-09-23 12:15:00', 3, 5),
 (94, 'pendente', '2019-10-28 08:05:00', 1, 9),
-(95, 'pendente', '2019-10-28 08:05:00', 3, 9);
+(95, 'pendente', '2019-10-28 08:05:00', 3, 9),
+(110, 'pendente', '2019-10-28 08:05:00', 128, 1),
+(111, 'pendente', '2023-03-17 18:44:00', 128, 5),
+(112, 'pendente', '2023-03-17 18:44:00', 128, 6),
+(135, 'pendente', '2023-03-24 21:17:00', 1, 7),
+(136, 'pendente', '2023-03-24 21:17:00', 3, 7),
+(137, 'pendente', '2023-03-24 21:17:00', 38, 7),
+(138, 'pendente', '2023-03-24 21:17:00', 39, 7),
+(139, 'pendente', '2023-03-24 21:17:00', 40, 7),
+(140, 'pendente', '2023-03-24 21:17:00', 41, 7),
+(141, 'pendente', '2023-03-24 21:17:00', 42, 7),
+(142, 'pendente', '2023-03-24 21:17:00', 43, 7),
+(143, 'pendente', '2023-03-24 21:17:00', 44, 7),
+(144, 'pendente', '2023-03-24 21:17:00', 45, 7),
+(145, 'pendente', '2023-03-24 21:17:00', 51, 7),
+(146, 'pendente', '2023-03-24 21:17:00', 75, 7),
+(147, 'pendente', '2023-05-17 19:17:00', 129, 4),
+(148, 'pendente', '2023-05-17 19:27:00', 130, 5),
+(149, 'pendente', '2023-05-17 19:30:00', 130, 5),
+(150, 'pendente', '2023-05-17 19:36:00', 130, 5),
+(151, 'Corrigida - Com nota', '2023-05-17 19:36:00', 131, 5),
+(152, 'pendente', '2023-05-17 19:36:00', 130, 9),
+(153, 'pendente', '2023-05-17 19:36:00', 131, 9),
+(154, 'pendente', '2023-05-26 21:36:00', 130, 4),
+(155, 'Corrigida - Com nota', '2023-05-26 21:36:00', 131, 4),
+(156, 'pendente', '2023-06-02 18:55:00', 130, 5),
+(157, 'Corrigida - Com nota', '2023-06-02 18:55:00', 131, 5),
+(158, 'pendente', '2023-06-02 18:55:00', 130, 6),
+(159, 'pendente', '2023-06-02 18:55:00', 131, 6),
+(160, 'pendente', '2023-06-02 18:55:00', 130, 4),
+(161, 'Corrigida - Com nota', '2023-06-02 18:55:00', 131, 4),
+(162, 'pendente', '2023-06-02 18:55:00', 130, 2),
+(163, 'pendente', '2023-06-02 18:55:00', 131, 2),
+(164, 'pendente', '2023-06-02 18:55:00', 130, 8),
+(165, 'pendente', '2023-06-02 18:55:00', 131, 8),
+(166, 'pendente', '2023-06-02 18:55:00', 130, 3),
+(167, 'Corrigida - Com nota', '2023-06-02 18:55:00', 131, 3),
+(168, 'pendente', '2023-06-02 18:55:00', 130, 9),
+(169, 'pendente', '2023-06-02 18:55:00', 131, 9),
+(170, 'pendente', '2023-06-02 18:55:00', 130, 7),
+(171, 'Corrigida - Com nota', '2023-06-02 18:55:00', 131, 7),
+(172, 'pendente', '2023-06-02 18:56:00', 130, 1),
+(173, 'Corrigida - Com nota', '2023-06-02 18:56:00', 131, 1),
+(185, 'Corrigida - Com nota', '2023-06-02 19:41:00', 132, 5),
+(186, 'Corrigida - Com nota', '2023-06-02 19:47:00', 132, 1),
+(187, 'Corrigida - Com nota', '2023-06-02 20:18:00', 132, 2),
+(188, 'Corrigida - Com nota', '2023-06-02 20:24:00', 132, 5),
+(189, 'Corrigida - Com nota', '2023-06-02 20:24:00', 132, 1),
+(190, 'Corrigida - Com nota', '2023-06-02 20:45:00', 132, 1),
+(191, 'Corrigida - Com nota', '2023-06-02 20:52:00', 132, 1),
+(192, 'Corrigida - Com nota', '2023-06-02 21:08:00', 132, 2),
+(193, 'Corrigida - Com nota', '2023-06-02 21:26:00', 132, 1),
+(194, 'Corrigida - Com nota', '2023-06-02 21:28:00', 132, 1),
+(195, 'pendente', '2023-06-11 11:41:00', 130, 5),
+(196, 'Corrigida - Com nota', '2023-06-11 11:41:00', 131, 5),
+(197, 'pendente', '2023-06-11 11:42:00', 130, 1),
+(198, 'Corrigida - Com nota', '2023-06-11 11:42:00', 131, 1),
+(199, 'pendente', '2023-06-11 12:27:00', 132, 5),
+(200, 'Corrigida - Com nota', '2023-06-11 12:27:00', 132, 2),
+(201, 'Corrigida - Com nota', '2023-06-11 12:27:00', 132, 8),
+(202, 'Corrigida - Com nota', '2023-06-11 12:27:00', 132, 3),
+(203, 'pendente', '2023-06-11 12:27:00', 132, 1),
+(204, 'pendente', '2023-06-11 20:23:00', 130, 1),
+(205, 'Corrigida - Com nota', '2023-06-11 20:23:00', 131, 1),
+(206, 'pendente', '2023-06-11 20:26:00', 130, 1),
+(207, 'Corrigida - Com nota', '2023-06-11 20:26:00', 131, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `atividade_turma`
+-- Estrutura da tabela `atividade_turma`
 --
 
 DROP TABLE IF EXISTS `atividade_turma`;
 CREATE TABLE IF NOT EXISTS `atividade_turma` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `atividade_id` int(11) NOT NULL,
-  `turma_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `atividade_id` int NOT NULL,
+  `turma_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `atividade_id` (`atividade_id`),
   KEY `turma_id` (`turma_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
--- Dumping data for table `atividade_turma`
+-- Extraindo dados da tabela `atividade_turma`
 --
 
 INSERT INTO `atividade_turma` (`id`, `atividade_id`, `turma_id`) VALUES
@@ -310,51 +375,142 @@ INSERT INTO `atividade_turma` (`id`, `atividade_id`, `turma_id`) VALUES
 (47, 1, 24),
 (48, 3, 19),
 (49, 9, 24),
-(50, 9, 2);
+(50, 9, 2),
+(51, 1, 26),
+(52, 5, 20),
+(53, 5, 19),
+(54, 5, 1),
+(55, 5, 2),
+(56, 5, 24),
+(57, 5, 25),
+(58, 5, 26),
+(59, 6, 20),
+(60, 6, 19),
+(61, 6, 1),
+(62, 6, 2),
+(63, 6, 24),
+(64, 6, 25),
+(65, 6, 26),
+(66, 5, 1),
+(68, 7, 2),
+(69, 4, 19),
+(70, 5, 28),
+(71, 5, 28),
+(72, 5, 28),
+(73, 9, 28),
+(74, 4, 28),
+(75, 5, 28),
+(76, 6, 28),
+(77, 4, 28),
+(78, 2, 28),
+(79, 8, 28),
+(80, 3, 28),
+(81, 9, 28),
+(82, 7, 28),
+(83, 1, 28),
+(84, 5, 30),
+(85, 6, 30),
+(86, 4, 30),
+(87, 2, 30),
+(88, 8, 30),
+(89, 3, 30),
+(90, 9, 30),
+(91, 7, 30),
+(92, 1, 30),
+(93, 10, 30),
+(94, 4, 30),
+(95, 5, 30),
+(96, 1, 30),
+(97, 2, 30),
+(98, 5, 30),
+(99, 1, 30),
+(100, 1, 30),
+(101, 1, 30),
+(102, 2, 30),
+(103, 1, 30),
+(104, 1, 30),
+(105, 5, 28),
+(106, 1, 28),
+(107, 5, 30),
+(108, 2, 30),
+(109, 8, 30),
+(110, 3, 30),
+(111, 1, 30),
+(112, 1, 28),
+(113, 1, 28);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `aula`
+-- Estrutura da tabela `aula`
 --
 
 DROP TABLE IF EXISTS `aula`;
 CREATE TABLE IF NOT EXISTS `aula` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `titulo` varchar(45) COLLATE latin1_general_ci NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `titulo` varchar(45) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `data` date NOT NULL,
-  `professor_id` int(11) NOT NULL,
-  `disciplina_id` int(11) NOT NULL,
+  `professor_id` int NOT NULL,
+  `disciplina_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `disciplina_id` (`disciplina_id`),
   KEY `professor_id` (`professor_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
--- Dumping data for table `aula`
+-- Extraindo dados da tabela `aula`
 --
 
 INSERT INTO `aula` (`id`, `titulo`, `data`, `professor_id`, `disciplina_id`) VALUES
 (6, 'Lógica Aplicada', '2019-10-31', 47, 4),
-(7, 'Aula de lógica com loops', '2019-10-31', 2, 1);
+(7, 'Aula de lógica com loops', '2019-10-31', 2, 1),
+(8, 'asdasdas', '2023-05-17', 1, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `curso`
+-- Estrutura da tabela `chatturma`
+--
+
+DROP TABLE IF EXISTS `chatturma`;
+CREATE TABLE IF NOT EXISTS `chatturma` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `idTurma` int NOT NULL,
+  `idAluno` int NOT NULL,
+  `mensagem` varchar(255) NOT NULL,
+  `hora` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Extraindo dados da tabela `chatturma`
+--
+
+INSERT INTO `chatturma` (`id`, `idTurma`, `idAluno`, `mensagem`, `hora`) VALUES
+(1, 2, 51, 'alalala', '0000-00-00 00:00:00'),
+(2, 2, 51, 'ulululu', '0000-00-00 00:00:00'),
+(3, 2, 51, 'Olá rapazeada', '2023-04-28 19:06:00'),
+(4, 2, 51, 'Bom dia!', '2023-04-28 21:23:10'),
+(5, 28, 130, 'a', '2023-05-17 19:28:12'),
+(6, 28, 131, 'Poxa Chavinho!', '2023-06-11 11:37:57');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `curso`
 --
 
 DROP TABLE IF EXISTS `curso`;
 CREATE TABLE IF NOT EXISTS `curso` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(50) COLLATE latin1_general_ci NOT NULL,
-  `escola_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nome` varchar(50) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `escola_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `escola_id` (`escola_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
--- Dumping data for table `curso`
+-- Extraindo dados da tabela `curso`
 --
 
 INSERT INTO `curso` (`id`, `nome`, `escola_id`) VALUES
@@ -367,21 +523,21 @@ INSERT INTO `curso` (`id`, `nome`, `escola_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `disciplina`
+-- Estrutura da tabela `disciplina`
 --
 
 DROP TABLE IF EXISTS `disciplina`;
 CREATE TABLE IF NOT EXISTS `disciplina` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(45) COLLATE latin1_general_ci NOT NULL,
-  `sigla` varchar(6) COLLATE latin1_general_ci NOT NULL,
-  `curso_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nome` varchar(45) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `sigla` varchar(6) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `curso_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `curso_id` (`curso_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
--- Dumping data for table `disciplina`
+-- Extraindo dados da tabela `disciplina`
 --
 
 INSERT INTO `disciplina` (`id`, `nome`, `sigla`, `curso_id`) VALUES
@@ -394,14 +550,14 @@ INSERT INTO `disciplina` (`id`, `nome`, `sigla`, `curso_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `disciplina_professor`
+-- Estrutura da tabela `disciplina_professor`
 --
 
 DROP TABLE IF EXISTS `disciplina_professor`;
 CREATE TABLE IF NOT EXISTS `disciplina_professor` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `disciplina_id` int(11) NOT NULL,
-  `professor_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `disciplina_id` int NOT NULL,
+  `professor_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `disciplina_id` (`disciplina_id`),
   KEY `professor_id` (`professor_id`)
@@ -410,14 +566,14 @@ CREATE TABLE IF NOT EXISTS `disciplina_professor` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `disciplina_turma`
+-- Estrutura da tabela `disciplina_turma`
 --
 
 DROP TABLE IF EXISTS `disciplina_turma`;
 CREATE TABLE IF NOT EXISTS `disciplina_turma` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `disciplina_id` int(11) NOT NULL,
-  `turma_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `disciplina_id` int NOT NULL,
+  `turma_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `disciplina_id` (`disciplina_id`),
   KEY `turma_id` (`turma_id`)
@@ -426,27 +582,27 @@ CREATE TABLE IF NOT EXISTS `disciplina_turma` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `escola`
+-- Estrutura da tabela `escola`
 --
 
 DROP TABLE IF EXISTS `escola`;
 CREATE TABLE IF NOT EXISTS `escola` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(45) COLLATE latin1_general_ci NOT NULL,
-  `cnpj` int(11) NOT NULL,
-  `endereco` varchar(45) COLLATE latin1_general_ci NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nome` varchar(45) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `cnpj` int NOT NULL,
+  `endereco` varchar(45) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `usuario_id` int(11) NOT NULL,
+  `usuario_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `usuario_id` (`usuario_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
--- Dumping data for table `escola`
+-- Extraindo dados da tabela `escola`
 --
 
 INSERT INTO `escola` (`id`, `nome`, `cnpj`, `endereco`, `status`, `usuario_id`) VALUES
-(1, 'Santa Maria', 123321, 'Cidade Novas', 1, 28),
+(1, 'Santa Maria', 150150150, 'Cidade Novas', 1, 28),
 (2, 'Nossa senhora das dores', 123, 'floresta', 1, 3),
 (3, 'escola teste', 1221212, '11212', 1, 2),
 (4, 'teste', 0, 'teste', 1, 150);
@@ -454,49 +610,59 @@ INSERT INTO `escola` (`id`, `nome`, `cnpj`, `endereco`, `status`, `usuario_id`) 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `medalha`
+-- Estrutura da tabela `medalha`
 --
 
 DROP TABLE IF EXISTS `medalha`;
 CREATE TABLE IF NOT EXISTS `medalha` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome_medalha` varchar(50) COLLATE latin1_general_ci NOT NULL,
-  `tipo` int(11) NOT NULL,
-  `peso` int(11) NOT NULL,
-  `aluno_id` int(11) NOT NULL,
-  `atividade_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nome_medalha` varchar(50) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `tipo` int NOT NULL,
+  `peso` int NOT NULL,
+  `aluno_id` int NOT NULL,
+  `atividade_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `aluno_id` (`aluno_id`),
   KEY `atividade_id` (`atividade_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
--- Dumping data for table `medalha`
+-- Extraindo dados da tabela `medalha`
 --
 
 INSERT INTO `medalha` (`id`, `nome_medalha`, `tipo`, `peso`, `aluno_id`, `atividade_id`) VALUES
-(1, 'Ouro', 2, 3, 128, 10);
+(1, 'Ouro', 2, 3, 128, 10),
+(2, 'Ouro', 2, 3, 132, 1),
+(3, 'Ouro', 2, 3, 132, 2),
+(4, 'Ouro', 2, 3, 132, 5),
+(5, 'Ouro', 2, 3, 131, 1),
+(6, 'ouro', 2, 3, 131, 3),
+(7, 'ouro', 2, 3, 131, 5),
+(8, 'ouro', 2, 3, 131, 7),
+(9, 'Ouro', 2, 3, 132, 3),
+(10, 'Ouro', 2, 3, 132, 8),
+(11, 'ouro', 2, 3, 131, 4);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `nota`
+-- Estrutura da tabela `nota`
 --
 
 DROP TABLE IF EXISTS `nota`;
 CREATE TABLE IF NOT EXISTS `nota` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `valor_atividade` double NOT NULL,
-  `nota` int(11) NOT NULL,
-  `aluno_id` int(11) NOT NULL,
-  `atividade_id` int(11) NOT NULL,
+  `nota` int NOT NULL,
+  `aluno_id` int NOT NULL,
+  `atividade_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `aluno_id` (`aluno_id`),
   KEY `atividade_id` (`atividade_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=122 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=135 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
--- Dumping data for table `nota`
+-- Extraindo dados da tabela `nota`
 --
 
 INSERT INTO `nota` (`id`, `valor_atividade`, `nota`, `aluno_id`, `atividade_id`) VALUES
@@ -511,28 +677,40 @@ INSERT INTO `nota` (`id`, `valor_atividade`, `nota`, `aluno_id`, `atividade_id`)
 (53, 10, 9, 35, 1),
 (54, 10, 3, 36, 1),
 (55, 10, 10, 37, 1),
-(117, 10, 10, 3, 5);
+(117, 10, 10, 3, 5),
+(122, 10, 10, 132, 1),
+(123, 10, 0, 132, 4),
+(124, 10, 10, 132, 2),
+(125, 10, 0, 132, 7),
+(126, 10, 10, 132, 5),
+(127, 10, 10, 131, 1),
+(128, 10, 0, 131, 3),
+(129, 10, 0, 131, 5),
+(130, 10, 0, 131, 7),
+(132, 10, 10, 132, 3),
+(133, 10, 10, 132, 8),
+(134, 10, 6, 131, 4);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `notificacao`
+-- Estrutura da tabela `notificacao`
 --
 
 DROP TABLE IF EXISTS `notificacao`;
 CREATE TABLE IF NOT EXISTS `notificacao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `descricao` text CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
-  `aluno_id` int(11) NOT NULL,
+  `aluno_id` int NOT NULL,
   `data` date DEFAULT NULL,
-  `id_enviou` int(11) DEFAULT NULL,
+  `id_enviou` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `aluno_id` (`aluno_id`),
   KEY `id_enviou` (`id_enviou`)
-) ENGINE=InnoDB AUTO_INCREMENT=147 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=223 DEFAULT CHARSET=utf8mb3;
 
 --
--- Dumping data for table `notificacao`
+-- Extraindo dados da tabela `notificacao`
 --
 
 INSERT INTO `notificacao` (`id`, `descricao`, `aluno_id`, `data`, `id_enviou`) VALUES
@@ -546,66 +724,129 @@ INSERT INTO `notificacao` (`id`, `descricao`, `aluno_id`, `data`, `id_enviou`) V
 (126, ' Sejam todos muito bem-vindos ao EasyLearning! Juntos mudaremos a forma de se educar no mundo!', 35, '2019-10-27', 48),
 (127, ' Sejam todos muito bem-vindos ao EasyLearning! Juntos mudaremos a forma de se educar no mundo!', 36, '2019-10-27', 48),
 (128, ' Sejam todos muito bem-vindos ao EasyLearning! Juntos mudaremos a forma de se educar no mundo!', 37, '2019-10-27', 48),
-(145, ' Fellipe, você é demais meu amigo! Merece uma batata.', 3, '2019-10-28', 48);
+(145, ' Fellipe, você é demais meu amigo! Merece uma batata.', 3, '2019-10-28', 48),
+(155, ' 123123', 45, '2023-03-24', 1),
+(158, ' teste 123', 45, '2023-03-24', 1),
+(163, ' teste', 131, '2023-06-11', 50),
+(165, ' aaa', 1, '2023-06-11', 50),
+(166, ' aaa', 3, '2023-06-11', 50),
+(167, ' aaa', 30, '2023-06-11', 50),
+(168, ' aaa', 31, '2023-06-11', 50),
+(169, ' aaa', 32, '2023-06-11', 50),
+(170, ' aaa', 33, '2023-06-11', 50),
+(171, ' aaa', 34, '2023-06-11', 50),
+(172, ' aaa', 35, '2023-06-11', 50),
+(173, ' aaa', 36, '2023-06-11', 50),
+(174, ' aaa', 37, '2023-06-11', 50),
+(175, ' aaa', 38, '2023-06-11', 50),
+(176, ' aaa', 39, '2023-06-11', 50),
+(177, ' aaa', 40, '2023-06-11', 50),
+(178, ' aaa', 41, '2023-06-11', 50),
+(179, ' aaa', 42, '2023-06-11', 50),
+(180, ' aaa', 43, '2023-06-11', 50),
+(181, ' aaa', 44, '2023-06-11', 50),
+(182, ' aaa', 45, '2023-06-11', 50),
+(183, ' aaa', 51, '2023-06-11', 50),
+(184, ' aaa', 70, '2023-06-11', 50),
+(185, ' aaa', 75, '2023-06-11', 50),
+(186, ' aaa', 81, '2023-06-11', 50),
+(187, ' aaa', 82, '2023-06-11', 50),
+(188, ' aaa', 127, '2023-06-11', 50),
+(189, ' aaa', 128, '2023-06-11', 50),
+(190, ' aaa', 129, '2023-06-11', 50),
+(191, ' aaa', 130, '2023-06-11', 50),
+(192, ' aaa', 131, '2023-06-11', 50),
+(193, ' aaa', 132, '2023-06-11', 50),
+(194, ' Chiquita!', 1, '2023-06-11', 50),
+(195, ' Chiquita!', 3, '2023-06-11', 50),
+(196, ' Chiquita!', 30, '2023-06-11', 50),
+(197, ' Chiquita!', 31, '2023-06-11', 50),
+(198, ' Chiquita!', 32, '2023-06-11', 50),
+(199, ' Chiquita!', 33, '2023-06-11', 50),
+(200, ' Chiquita!', 34, '2023-06-11', 50),
+(201, ' Chiquita!', 35, '2023-06-11', 50),
+(202, ' Chiquita!', 36, '2023-06-11', 50),
+(203, ' Chiquita!', 37, '2023-06-11', 50),
+(204, ' Chiquita!', 38, '2023-06-11', 50),
+(205, ' Chiquita!', 39, '2023-06-11', 50),
+(206, ' Chiquita!', 40, '2023-06-11', 50),
+(207, ' Chiquita!', 41, '2023-06-11', 50),
+(208, ' Chiquita!', 42, '2023-06-11', 50),
+(209, ' Chiquita!', 43, '2023-06-11', 50),
+(210, ' Chiquita!', 44, '2023-06-11', 50),
+(211, ' Chiquita!', 45, '2023-06-11', 50),
+(212, ' Chiquita!', 51, '2023-06-11', 50),
+(213, ' Chiquita!', 70, '2023-06-11', 50),
+(214, ' Chiquita!', 75, '2023-06-11', 50),
+(215, ' Chiquita!', 81, '2023-06-11', 50),
+(216, ' Chiquita!', 82, '2023-06-11', 50),
+(217, ' Chiquita!', 127, '2023-06-11', 50),
+(218, ' Chiquita!', 128, '2023-06-11', 50),
+(219, ' Chiquita!', 129, '2023-06-11', 50),
+(220, ' Chiquita!', 130, '2023-06-11', 50),
+(221, ' Chiquita!', 131, '2023-06-11', 50),
+(222, ' Chiquita!', 132, '2023-06-11', 50);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `professor`
+-- Estrutura da tabela `professor`
 --
 
 DROP TABLE IF EXISTS `professor`;
 CREATE TABLE IF NOT EXISTS `professor` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(80) COLLATE latin1_general_ci NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nome` varchar(80) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `escola_id` int(11) NOT NULL,
-  `usuario_id` int(11) NOT NULL,
+  `escola_id` int NOT NULL,
+  `usuario_id` int NOT NULL,
+  `sobrenome` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `escola_id_Professor` (`escola_id`),
   KEY `usuario_id_professor` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
--- Dumping data for table `professor`
+-- Extraindo dados da tabela `professor`
 --
 
-INSERT INTO `professor` (`id`, `nome`, `status`, `escola_id`, `usuario_id`) VALUES
-(1, 'Professor Nome', 1, 1, 4),
-(2, 'Professor Fellipis', 1, 1, 3),
-(13, 'Gabriel', 1, 2, 2),
-(24, 'Gabriel', 1, 3, 134),
-(32, 'Orfeu', 1, 2, 35),
-(34, 'Gabriel', 1, 2, 124),
-(35, 'Jose Teste', 1, 3, 118),
-(36, 'juan', 1, 1, 37),
-(38, 'Furts', 1, 3, 26),
-(40, 'Gabriel', 1, 2, 32),
-(41, 'juan', 1, 1, 8),
-(42, 'Gabriel', 1, 2, 137),
-(44, 'Jorgetest', 1, 2, 4),
-(45, 'Orfeu', 1, 1, 43),
-(47, 'Carlinhos', 1, 2, 37),
-(48, 'Professor Teste', 1, 4, 151);
+INSERT INTO `professor` (`id`, `nome`, `status`, `escola_id`, `usuario_id`, `sobrenome`) VALUES
+(1, 'Fellipe', 1, 1, 4, 'Saraiva'),
+(2, 'Professor Fellipis', 1, 1, 3, NULL),
+(13, 'Gabriel', 1, 2, 2, NULL),
+(24, 'Gabriel', 1, 3, 134, NULL),
+(32, 'Orfeu', 1, 2, 35, NULL),
+(34, 'Gabriel', 1, 2, 124, NULL),
+(35, 'Jose Teste', 1, 3, 118, NULL),
+(36, 'juan', 1, 1, 37, NULL),
+(38, 'Furts', 1, 3, 26, NULL),
+(40, 'Gabriel', 1, 2, 32, NULL),
+(41, 'juan', 1, 1, 8, NULL),
+(42, 'Gabriel', 1, 2, 137, NULL),
+(45, 'Orfeu', 1, 1, 43, NULL),
+(47, 'Carlinhos', 1, 2, 37, NULL),
+(48, 'Professor Teste', 1, 4, 151, NULL),
+(49, 'Professor maluco', 0, 1, 156, NULL),
+(50, 'Professor Girafales', 0, 1, 157, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `quero_conhecer`
+-- Estrutura da tabela `quero_conhecer`
 --
 
 DROP TABLE IF EXISTS `quero_conhecer`;
 CREATE TABLE IF NOT EXISTS `quero_conhecer` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `mensagem` text COLLATE utf8_unicode_ci NOT NULL,
-  `notificacoes` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nome` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `email` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `mensagem` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `notificacoes` varchar(5) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Dumping data for table `quero_conhecer`
+-- Extraindo dados da tabela `quero_conhecer`
 --
 
 INSERT INTO `quero_conhecer` (`id`, `nome`, `email`, `mensagem`, `notificacoes`) VALUES
@@ -622,89 +863,101 @@ INSERT INTO `quero_conhecer` (`id`, `nome`, `email`, `mensagem`, `notificacoes`)
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ranking_geral`
+-- Estrutura da tabela `ranking_geral`
 --
 
 DROP TABLE IF EXISTS `ranking_geral`;
 CREATE TABLE IF NOT EXISTS `ranking_geral` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(45) DEFAULT NULL,
-  `bronze` int(11) DEFAULT NULL,
-  `prata` int(11) DEFAULT NULL,
-  `ouro` int(11) DEFAULT NULL,
-  `pontos` bigint(14) DEFAULT NULL,
-  `aluno_id` int(11) DEFAULT NULL,
+  `bronze` int DEFAULT NULL,
+  `prata` int DEFAULT NULL,
+  `ouro` int DEFAULT NULL,
+  `pontos` bigint DEFAULT NULL,
+  `aluno_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `aluno_id` (`aluno_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `ranking_geral`
+--
+
+INSERT INTO `ranking_geral` (`id`, `nome`, `bronze`, `prata`, `ouro`, `pontos`, `aluno_id`) VALUES
+(1, 'Enzo', 1, 3, 10, 10, 36),
+(2, 'Orfeu', 2, 5, 10, 10, 37);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `turma`
+-- Estrutura da tabela `turma`
 --
 
 DROP TABLE IF EXISTS `turma`;
 CREATE TABLE IF NOT EXISTS `turma` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome_turma` varchar(45) COLLATE latin1_general_ci NOT NULL,
-  `status` int(11) DEFAULT '1',
-  `escola_id_turma` int(11) NOT NULL,
-  `professor_id_turma` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nome_turma` varchar(45) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `status` int DEFAULT '1',
+  `escola_id_turma` int NOT NULL,
+  `professor_id_turma` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `escola_id_turma` (`escola_id_turma`),
   KEY `professor_id_turma` (`professor_id_turma`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
--- Dumping data for table `turma`
+-- Extraindo dados da tabela `turma`
 --
 
 INSERT INTO `turma` (`id`, `nome_turma`, `status`, `escola_id_turma`, `professor_id_turma`) VALUES
 (1, '7 ano 102 ', 1, 1, 1),
-(2, '8 ano 304', 1, 1, 1),
+(2, '8 ano 200', 1, 1, 1),
 (19, '6 ano 305', 1, 1, 1),
 (20, '5 ano 101', 1, 1, 1),
-(24, '9 ano 470', 0, 2, 13),
-(25, 'Turma Exelente Boa', 1, 1, 38),
-(26, 'Turma Teste', 1, 4, 48);
+(24, 'Testes2', 0, 2, 13),
+(25, 'Turma TESTE 2 ', 0, 1, 38),
+(26, 'Turma Teste', 0, 4, 48),
+(27, '123', 0, 1, 1),
+(28, 'Turma do Chaves', 1, 1, 50),
+(29, 'Turma do Professor Raimundos', 0, 1, 50),
+(30, 'Turma Fellipe', 1, 1, 50);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `usuarios`
+-- Estrutura da tabela `usuarios`
 --
 
 DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE IF NOT EXISTS `usuarios` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `usuario` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `login` varchar(20) NOT NULL,
   `senha` varchar(50) NOT NULL,
   `foto` varchar(45) DEFAULT '1.png',
-  `tipo` int(11) DEFAULT '0',
-  `status` int(11) NOT NULL,
+  `tipo` int DEFAULT '0',
+  `status` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=153 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=161 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `usuarios`
+-- Extraindo dados da tabela `usuarios`
 --
 
 INSERT INTO `usuarios` (`id`, `usuario`, `email`, `login`, `senha`, `foto`, `tipo`, `status`) VALUES
-(1, 'rafael', 'rafaellercmr@gmail.com', 'rafael', '4297f44b13955235245b2497399d7a93', '1.png', 2, 1),
+(1, 'fellipe', 'fellipe@fellipe.com', 'fellipe123', '202cb962ac59075b964b07152d234b70', '1.png', 2, 1),
 (2, 'Gabriel', 'gabrielbiel120501@gmail.com', 'Lage1205', 'b571ecea16a9824023ee1af16897a582', '1.png', 2, 0),
 (3, 'FellipeBS', 'fellipebarcelossaraiva@gmail.com', 'FellipeBS', '58477a3f90f97f6fe1914de0275846da', '2.png', 0, 1),
-(4, 'professor', 'teacher@professor', 'pro', '202cb962ac59075b964b07152d234b70', '1.png', 1, 1),
+(4, 'professor', 'teacher@professor.com', 'pro', 'caf1a3dfb505ffed0d024130f58c5cfa', '3.png', 1, 1),
 (8, 'JoaoZim', 'JoaoZim@JoaoZim.com', 'JoaoZim', '202cb962ac59075b964b07152d234b70', '1.png', 1, 1),
 (26, 'juan', 'asd@asd', 'juan', '81dc9bdb52d04dc20036dbd8313ed055', '4.png', 0, 1),
-(28, 'Cordenadora Lara', 'lara@lara.com', 'lara', '202cb962ac59075b964b07152d234b70', 'usu.png', 2, 1),
-(29, 'Joao', 'jaoa@joao.com', 'jao1', '202cb962ac59075b964b07152d234b70', '1.png', 0, 1),
+(28, 'Cordenadora Lara', 'lara@lara.com', 'lara', '202cb962ac59075b964b07152d234b70', '5.png', 2, 1),
+(29, 'Joao', 'jaoa@joao.com', 'joao', '202cb962ac59075b964b07152d234b70', '1.png', 0, 1),
 (30, 'Joao2', 'jaoa@joao.com', 'jao2', '202cb962ac59075b964b07152d234b70', '1.png', 0, 1),
 (31, 'Joao3', 'jaoa@joao.com', 'jao3', '202cb962ac59075b964b07152d234b70', '1.png', 0, 1),
 (32, 'Malena', 'malena@malena.com', 'maleninha', '202cb962ac59075b964b07152d234b70', '1.png', 1, 1),
-(33, 'Joana', 'Joana@joana.com', 'joana', '202cb962ac59075b964b07152d234b70', '1.png', 0, 1),
+(33, 'Joana', 'Joana@joana.com', 'teste123', '202cb962ac59075b964b07152d234b70', '1.png', 0, 1),
 (34, 'Guedes', 'guedes@guedes.com', 'guedes', '202cb962ac59075b964b07152d234b70', '1.png', 0, 0),
 (35, 'Orfeu', 'orfeu@orfeu.com', 'orfeu', '202cb962ac59075b964b07152d234b70', '1.png', 0, 0),
 (36, 'Enzo', 'enzo@enzo.com', 'enzo', '202cb962ac59075b964b07152d234b70', '1.png', 0, 0),
@@ -716,7 +969,7 @@ INSERT INTO `usuarios` (`id`, `usuario`, `email`, `login`, `senha`, `foto`, `tip
 (42, 'Katarina', 'katarina@katarina.com', 'katarina', '202cb962ac59075b964b07152d234b70', '1.png', 1, 1),
 (43, 'laila', 'laila@laila.com', 'laila', '202cb962ac59075b964b07152d234b70', '1.png', 1, 1),
 (44, 'matheus', 'matheus@matheus.com', '', '202cb962ac59075b964b07152d234b70', '1.png', 0, 0),
-(45, 'Jubileu teste prof', 'teste@teste.com', 'teste Jubi', '123', '1.png', 0, 0),
+(45, 'testes', 'teste@teste.coma', 'gabriel123', '202cb962ac59075b964b07152d234b70', '6.png', 0, 0),
 (60, 'Teste1.0', 'teste200@gmail.com', 'teste200', '202cb962ac59075b964b07152d234b70', '1.png', 0, 1),
 (118, 'Alexandre', 'alexandref@cotemig.com.br', 'alef', '202cb962ac59075b964b07152d234b70', '1.png', 0, 0),
 (120, 'ddddd', 'ddddd@kk.com', 'dddd', 'a0a080f42e6f13b3a2df133f073095dd', '1.png', 0, 0),
@@ -738,115 +991,123 @@ INSERT INTO `usuarios` (`id`, `usuario`, `email`, `login`, `senha`, `foto`, `tip
 (148, 'Bobao', 'email@bobao.com', 'bobao', '202cb962ac59075b964b07152d234b70', 'default.png', 0, 1),
 (149, 'pedro', 'pedro@aluno.com', 'pedro', '202cb962ac59075b964b07152d234b70', 'default.png', 0, 0),
 (150, 'teste', 'teste@teste', 'teste', '202cb962ac59075b964b07152d234b70', '1.png', 0, 1),
-(151, 'professor teste', 'professor@teste', 'professor teste', '202cb962ac59075b964b07152d234b70', '1.png', 1, 1);
+(151, 'professor teste', 'professor@teste', 'professor teste', '202cb962ac59075b964b07152d234b70', '1.png', 1, 1),
+(153, 'Aluno24', 'aluno24@gmail.com', 'aluno24', '202cb962ac59075b964b07152d234b70', '1.png', 1, 0),
+(154, 'Pro123', 'pro123@pro.com', 'pro123', '202cb962ac59075b964b07152d234b70', '1.png', 1, 0),
+(155, 'Pro123', 'pro123@pro.com', 'pro123', '202cb962ac59075b964b07152d234b70', '1.png', 1, 0),
+(156, 'Pro123', 'pro123@pro.com', 'pro123', '202cb962ac59075b964b07152d234b70', '1.png', 1, 0),
+(157, 'Professor88', 'professor88@gmail.com', 'pro88', '202cb962ac59075b964b07152d234b70', '1.png', 1, 0),
+(158, 'chaves', 'chaves@vila.com', 'chaves', '202cb962ac59075b964b07152d234b70', '1.png', 0, 0),
+(159, 'chiquinha', 'chiquinha@vila.com', 'chiquinha', '202cb962ac59075b964b07152d234b70', '4.png', 0, 0),
+(160, 'fellipeteste', 'aaa@aaa.com', 'fellipeteste', '202cb962ac59075b964b07152d234b70', '1.png', 0, 0);
 
 --
--- Constraints for dumped tables
+-- Restrições para despejos de tabelas
 --
 
 --
--- Constraints for table `aluno`
+-- Limitadores para a tabela `aluno`
 --
 ALTER TABLE `aluno`
   ADD CONSTRAINT `aluno_ibfk_1` FOREIGN KEY (`turma_id`) REFERENCES `turma` (`id`),
   ADD CONSTRAINT `aluno_ibfk_2` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`);
 
 --
--- Constraints for table `atividade`
+-- Limitadores para a tabela `atividade`
 --
 ALTER TABLE `atividade`
   ADD CONSTRAINT `atividade_ibfk_1` FOREIGN KEY (`disciplina_id`) REFERENCES `disciplina` (`id`),
   ADD CONSTRAINT `atividade_ibfk_2` FOREIGN KEY (`professor_id`) REFERENCES `professor` (`id`);
 
 --
--- Constraints for table `atividade_aluno`
+-- Limitadores para a tabela `atividade_aluno`
 --
 ALTER TABLE `atividade_aluno`
   ADD CONSTRAINT `atividade_aluno_ibfk_1` FOREIGN KEY (`aluno_id`) REFERENCES `aluno` (`id`),
   ADD CONSTRAINT `atividade_aluno_ibfk_2` FOREIGN KEY (`atividade_id`) REFERENCES `atividade` (`id`);
 
 --
--- Constraints for table `atividade_turma`
+-- Limitadores para a tabela `atividade_turma`
 --
 ALTER TABLE `atividade_turma`
   ADD CONSTRAINT `atividade_turma_ibfk_1` FOREIGN KEY (`atividade_id`) REFERENCES `atividade` (`id`),
   ADD CONSTRAINT `atividade_turma_ibfk_2` FOREIGN KEY (`turma_id`) REFERENCES `turma` (`id`);
 
 --
--- Constraints for table `aula`
+-- Limitadores para a tabela `aula`
 --
 ALTER TABLE `aula`
   ADD CONSTRAINT `aula_ibfk_1` FOREIGN KEY (`disciplina_id`) REFERENCES `disciplina` (`id`),
   ADD CONSTRAINT `aula_ibfk_2` FOREIGN KEY (`professor_id`) REFERENCES `professor` (`id`);
 
 --
--- Constraints for table `curso`
+-- Limitadores para a tabela `curso`
 --
 ALTER TABLE `curso`
   ADD CONSTRAINT `curso_ibfk_1` FOREIGN KEY (`escola_id`) REFERENCES `escola` (`id`);
 
 --
--- Constraints for table `disciplina`
+-- Limitadores para a tabela `disciplina`
 --
 ALTER TABLE `disciplina`
   ADD CONSTRAINT `disciplina_ibfk_1` FOREIGN KEY (`curso_id`) REFERENCES `curso` (`id`);
 
 --
--- Constraints for table `disciplina_professor`
+-- Limitadores para a tabela `disciplina_professor`
 --
 ALTER TABLE `disciplina_professor`
   ADD CONSTRAINT `disciplina_professor_ibfk_1` FOREIGN KEY (`disciplina_id`) REFERENCES `disciplina` (`id`),
   ADD CONSTRAINT `disciplina_professor_ibfk_2` FOREIGN KEY (`professor_id`) REFERENCES `professor` (`id`);
 
 --
--- Constraints for table `disciplina_turma`
+-- Limitadores para a tabela `disciplina_turma`
 --
 ALTER TABLE `disciplina_turma`
   ADD CONSTRAINT `disciplina_turma_ibfk_1` FOREIGN KEY (`disciplina_id`) REFERENCES `disciplina` (`id`),
   ADD CONSTRAINT `disciplina_turma_ibfk_2` FOREIGN KEY (`turma_id`) REFERENCES `turma` (`id`);
 
 --
--- Constraints for table `escola`
+-- Limitadores para a tabela `escola`
 --
 ALTER TABLE `escola`
   ADD CONSTRAINT `escola_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`);
 
 --
--- Constraints for table `medalha`
+-- Limitadores para a tabela `medalha`
 --
 ALTER TABLE `medalha`
   ADD CONSTRAINT `medalha_ibfk_1` FOREIGN KEY (`aluno_id`) REFERENCES `aluno` (`id`),
   ADD CONSTRAINT `medalha_ibfk_2` FOREIGN KEY (`atividade_id`) REFERENCES `atividade` (`id`);
 
 --
--- Constraints for table `nota`
+-- Limitadores para a tabela `nota`
 --
 ALTER TABLE `nota`
   ADD CONSTRAINT `nota_ibfk_1` FOREIGN KEY (`aluno_id`) REFERENCES `aluno` (`id`),
   ADD CONSTRAINT `nota_ibfk_2` FOREIGN KEY (`atividade_id`) REFERENCES `atividade` (`id`);
 
 --
--- Constraints for table `notificacao`
+-- Limitadores para a tabela `notificacao`
 --
 ALTER TABLE `notificacao`
   ADD CONSTRAINT `notificacao_ibfk_1` FOREIGN KEY (`aluno_id`) REFERENCES `aluno` (`id`),
   ADD CONSTRAINT `notificacao_ibfk_2` FOREIGN KEY (`id_enviou`) REFERENCES `professor` (`id`);
 
 --
--- Constraints for table `professor`
+-- Limitadores para a tabela `professor`
 --
 ALTER TABLE `professor`
   ADD CONSTRAINT `professor_ibfk_1` FOREIGN KEY (`escola_id`) REFERENCES `escola` (`id`),
   ADD CONSTRAINT `professor_ibfk_2` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`);
 
 --
--- Constraints for table `ranking_geral`
+-- Limitadores para a tabela `ranking_geral`
 --
 ALTER TABLE `ranking_geral`
   ADD CONSTRAINT `ranking_geral_ibfk_1` FOREIGN KEY (`aluno_id`) REFERENCES `aluno` (`id`);
 
 --
--- Constraints for table `turma`
+-- Limitadores para a tabela `turma`
 --
 ALTER TABLE `turma`
   ADD CONSTRAINT `turma_ibfk_1` FOREIGN KEY (`escola_id_turma`) REFERENCES `escola` (`id`),
