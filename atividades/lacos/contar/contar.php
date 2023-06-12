@@ -5,7 +5,7 @@ $_SESSION['atividadeId'] = 5;
 $_SESSION['valorAtividade'] = 10;
 $_SESSION['titulo'] = "Atividade de contar";
 $_SESSION['arquivo_php'] = "contar.php";
-$_SESSION['pasta'] = "lacos/contar/";
+$_SESSION['pasta'] = "lacos/contar";
 $_SESSION['termos'] = 
 ['for (i = 1; i <= 5; i++)',
  'window.alert(i);'];

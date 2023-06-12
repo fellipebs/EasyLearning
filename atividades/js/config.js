@@ -52,7 +52,6 @@ executar = function() {
     }
   };
   var code = Blockly.JavaScript.workspaceToCode(workspace);
-  code = code.replace("window.alert(", "Swal.fire(''+")
   Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
   try {
     eval(code);
